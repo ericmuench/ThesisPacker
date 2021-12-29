@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ThesisPacker.Extensions;
 using ThesisPacker.Files;
 using ThesisPacker.Model;
+using ThesisPacker.BusinessLogic;
 
 namespace ThesisPacker.UserInteraction
 {
@@ -44,9 +45,12 @@ namespace ThesisPacker.UserInteraction
                 //getting config
                 string configPath = (args.Length > 0) ? args[0] : AskUserForConfigPath();
                 ThesisPackerConfig config = await _configDeserializer.DeserializeConfig(configPath);
-                Console.WriteLine(config.Files.PrettyPrint());
+                var thesisPacker = new BusinessLogicClerk();
+                await thesisPacker.Start(config, Console.WriteLine);
+                //TODO Delete this comment
+                /*Console.WriteLine(config.Files.PrettyPrint());
                 Console.WriteLine(config.TargetFolder);
-                Console.WriteLine(config.GitProjects.Select(it => $"{it.Name} ({it.IgnoredBranches.Count} ignored branches)").PrettyPrint());
+                Console.WriteLine(config.GitProjects.Select(it => $"{it.Name} ({it.IgnoredBranches.Count} ignored branches)").PrettyPrint());*/
             }
             catch (Exception ex)
             {
