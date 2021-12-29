@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ThesisPacker.Model
 {
@@ -6,14 +7,16 @@ namespace ThesisPacker.Model
     {
         #region Fields
         public List<string> Files { get; }
+        public string TargetFolder { get; }
         public List<GitProject> GitProjects { get; }
         #endregion
 
         #region Constructors
-        public ThesisPackerConfig(List<string> files, List<GitProject> gitProjects)
+        public ThesisPackerConfig(List<string> files, string targetFolder,List<GitProject> gitProjects)
         {
-            Files = files;
-            GitProjects = gitProjects;
+            TargetFolder = targetFolder;
+            Files = files ?? new List<string>();
+            GitProjects = gitProjects ?? new List<GitProject>();
         }
         #endregion
     }
@@ -31,7 +34,7 @@ namespace ThesisPacker.Model
         {
             Name = name;
             Url = url;
-            IgnoredBranches = ignoredBranches;
+            IgnoredBranches = ignoredBranches ?? new List<string>();
         }
 
         public GitProject(string name, string url) : this(name, url, new List<string>()) { }
