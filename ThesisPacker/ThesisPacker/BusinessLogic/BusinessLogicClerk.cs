@@ -13,8 +13,11 @@ namespace ThesisPacker.BusinessLogic
     {
         #region Fields
 
-        private const string ErrTargetDirectoryAlreadyExists =
-            "The Target Directory already exists. Please check your config file!";
+        private const string MsgStartThesisPacking = "Start Thesis Packing...";
+        private const string MsgPrepareTargetDir = "Preparing Target Directory...";
+        private const string MsgStartFileAssemble = "Starting File Assemble...";
+        private const string MsgStartGitAssemble = "Starting Git Assemble...";
+        private const string ErrOccurred = "An Error Occurred!";
 
         private readonly FilesAssembleClerk _filesAssembleClerk;
         private readonly GitAssembleClerk _gitAssembleClerk;
@@ -36,14 +39,19 @@ namespace ThesisPacker.BusinessLogic
         #region Interface Functions
         public async Task Start(ThesisPackerConfig config, Action<string> onLog)
         {
+            onLog(MsgStartThesisPacking);
             try
             {
+                onLog(MsgPrepareTargetDir);
                 if (!Directory.Exists(config.TargetFolder))
                 {
                     Directory.CreateDirectory(config.TargetFolder);
                 }
 
+                onLog(MsgStartFileAssemble);
                 var filesTask = _filesAssembleClerk.Start(config, onLog);
+                
+                onLog(MsgStartGitAssemble);
                 var gitTask = _gitAssembleClerk.Start(config, onLog);
 
                 await filesTask;
@@ -51,7 +59,8 @@ namespace ThesisPacker.BusinessLogic
             }
             catch (Exception ex)
             {
-                onLog(ex.StackTrace ?? ex.Message);
+                onLog(ErrOccurred);
+                onLog(ex.ToString());
             }
         }
         #endregion

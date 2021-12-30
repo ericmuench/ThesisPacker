@@ -15,7 +15,7 @@ namespace ThesisPacker.UserInteraction
                 return false;
             }
 
-            return File.Exists(@configFilePath) && configFilePath.Contains("config", true);
+            return File.Exists(@configFilePath);
         }
         #endregion
     }

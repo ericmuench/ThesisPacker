@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ThesisPacker.Files;
-using ThesisPacker.Model;
 using ThesisPacker.UserInteraction;
 
 namespace ThesisPacker

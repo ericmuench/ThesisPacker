@@ -17,6 +17,8 @@ namespace ThesisPacker.UserInteraction
         #region Fields
         private const string MsgPleaseEnterConfigPath =
             "There was no config path specified via Programm Arguments. Please enter the File-Path to your prefered Config.yaml File:";
+        private const string MsgDeserializedConfig =
+            "Successfully obtained Config...";
 
         private const string ErrInvalidConfigPath =
             "The specified Path seems not to be valid or does not exist. Please enter the File-Path to your prefered Config.yaml File:";
@@ -45,6 +47,7 @@ namespace ThesisPacker.UserInteraction
                 //getting config
                 string configPath = (args.Length > 0) ? args[0] : AskUserForConfigPath();
                 ThesisPackerConfig config = await _configDeserializer.DeserializeConfig(configPath);
+                Console.WriteLine(MsgDeserializedConfig);
                 var thesisPacker = new BusinessLogicClerk();
                 await thesisPacker.Start(config, Console.WriteLine);
                 //TODO Delete this comment
