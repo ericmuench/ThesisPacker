@@ -13,11 +13,10 @@ namespace ThesisPacker.BusinessLogic
         #region Interface Functions
         public async Task Start(ThesisPackerConfig config, Action<string> onLog)
         {
-            IEnumerable<string> allCopiedFiles = new List<string>(); 
             var copyTasks = config
                 .Files
                 .Distinct()
-                .Select(filePath => CopyData(filePath, config.TargetFolder, onLog));
+                .Select(filePath => CopyData(filePath, config.TargetDirectory, onLog));
             await Task.WhenAll(copyTasks);
         }
         #endregion
@@ -70,6 +69,7 @@ namespace ThesisPacker.BusinessLogic
                 var fileName = Path.GetFileName(originalFilePath);
                 var destFilePath = Path.Combine(destinationDirectory, fileName);
 
+                //Eventhough this should never happen, the following loop creates a new file name to avoid unexpected results because of duplicate filenames
                 var cnt = 2;
                 while (File.Exists(destFilePath))
                 {

@@ -22,20 +22,31 @@ namespace ThesisPacker.UserInteraction
 
         private const string ErrInvalidConfigPath =
             "The specified Path seems not to be valid or does not exist. Please enter the File-Path to your prefered Config.yaml File:";
-
+        private const string ErrInvalidConfigTargetDirectory =
+            "The specified Config files contains an error: The specified target directory is invalid! Please change your Config and try again!";
+        private const string ErrInvalidConfigCodeDirectory =
+            "The specified Config files contains an error: There seems to be a usage of Code, but the Code Directory is invalid. Please change your Config and try again!";
+        private const string ErrDuplicateFiles =
+            "The specified Config files contains an error: There seem to be file duplications. Please change your Config and try again!";
+        private const string ErrDuplicateGitProjects =
+            "The specified Config files contains an error: There seem to git Project duplications. Each Project needs an unique name. Please change your Config and try again!";
+        
 
         private readonly UserInputValidator _userInputValidator;
+        private readonly ConfigValidator _configValiator;
         private readonly IConfigDeserializer _configDeserializer;
         #endregion
 
         #region Constructors
         public MainMenu(
             UserInputValidator inputValidator,
+            ConfigValidator configValidator,
             IConfigDeserializer configDeserializer
         )
         {
             _userInputValidator = inputValidator;
             _configDeserializer = configDeserializer;
+            _configValiator = configValidator;
         }
         #endregion
 
@@ -48,11 +59,30 @@ namespace ThesisPacker.UserInteraction
                 string configPath = (args.Length > 0) ? args[0] : AskUserForConfigPath();
                 ThesisPackerConfig config = await _configDeserializer.DeserializeConfig(configPath);
                 Console.WriteLine(MsgDeserializedConfig);
-                var thesisPacker = new BusinessLogicClerk();
-                await thesisPacker.Start(config, Console.WriteLine);
+
+                var configValidation = _configValiator.ValidateConfig(config);
+                switch (configValidation)
+                {
+                    case ConfigValidator.ConfigValidationInfo.InvalidTargetDirectoryName:
+                        Console.WriteLine(ErrInvalidConfigTargetDirectory);
+                        break;
+                    case ConfigValidator.ConfigValidationInfo.InvalidCodeDirectoryName:
+                        Console.WriteLine(ErrInvalidConfigCodeDirectory);
+                        break;
+                    case ConfigValidator.ConfigValidationInfo.DuplicateFiles:
+                        Console.WriteLine(ErrDuplicateFiles);
+                        break;
+                    case ConfigValidator.ConfigValidationInfo.DuplicateGitProjects:
+                        Console.WriteLine(ErrDuplicateGitProjects);
+                        break;
+                    case ConfigValidator.ConfigValidationInfo.Valid:
+                        var thesisPacker = new BusinessLogicClerk();
+                        await thesisPacker.Start(config, Console.WriteLine);
+                        break;
+                }
                 //TODO Delete this comment
                 /*Console.WriteLine(config.Files.PrettyPrint());
-                Console.WriteLine(config.TargetFolder);
+                Console.WriteLine(config.TargetDirectory);
                 Console.WriteLine(config.GitProjects.Select(it => $"{it.Name} ({it.IgnoredBranches.Count} ignored branches)").PrettyPrint());*/
             }
             catch (Exception ex)

@@ -8,7 +8,7 @@ namespace ThesisPacker
     {
         static async Task Main(string[] args)
         {
-            MainMenu mainMenu = new MainMenu(new UserInputValidator(), new YamlConfigDeserializer());
+            MainMenu mainMenu = new MainMenu(new UserInputValidator(), new ConfigValidator(), new YamlConfigDeserializer());
             await mainMenu.Start(args);
         }
     }

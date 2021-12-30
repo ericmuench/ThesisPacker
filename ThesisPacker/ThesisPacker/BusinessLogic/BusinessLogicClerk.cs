@@ -43,9 +43,9 @@ namespace ThesisPacker.BusinessLogic
             try
             {
                 onLog(MsgPrepareTargetDir);
-                if (!Directory.Exists(config.TargetFolder))
+                if (!Directory.Exists(config.TargetDirectory))
                 {
-                    Directory.CreateDirectory(config.TargetFolder);
+                    Directory.CreateDirectory(config.TargetDirectory);
                 }
 
                 onLog(MsgStartFileAssemble);

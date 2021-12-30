@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,5 +20,7 @@ namespace ThesisPacker.Extensions
 
             return thisString?.Contains(otherString) ?? false;
         }
+
+        public static bool IsNullOrWhiteSpace(this string? str) => string.IsNullOrWhiteSpace(str);
     }
 }

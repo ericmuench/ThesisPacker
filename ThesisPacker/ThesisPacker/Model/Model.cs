@@ -7,14 +7,16 @@ namespace ThesisPacker.Model
     {
         #region Fields
         public List<string> Files { get; }
-        public string TargetFolder { get; }
+        public string TargetDirectory { get; }
+        public string CodeDirectoryName { get; }
         public List<GitProject> GitProjects { get; }
         #endregion
 
         #region Constructors
-        public ThesisPackerConfig(List<string> files, string targetFolder,List<GitProject> gitProjects)
+        public ThesisPackerConfig(List<string> files, string targetDirectory, string codeDirName, List<GitProject> gitProjects)
         {
-            TargetFolder = targetFolder;
+            TargetDirectory = targetDirectory;
+            CodeDirectoryName = codeDirName;
             Files = files ?? new List<string>();
             GitProjects = gitProjects ?? new List<GitProject>();
         }
@@ -27,17 +29,35 @@ namespace ThesisPacker.Model
         public string Name { get; }
         public string Url { get; }
         public List<string> IgnoredBranches { get; }
+        public GitCredentials GitCredentials { get; }
         #endregion
 
         #region Constructors
-        public GitProject(string name, string url, List<string> ignoredBranches)
+        public GitProject(string name, string url, List<string> ignoredBranches, GitCredentials credentials)
         {
             Name = name;
             Url = url;
             IgnoredBranches = ignoredBranches ?? new List<string>();
+            GitCredentials = credentials;
         }
 
-        public GitProject(string name, string url) : this(name, url, new List<string>()) { }
+        public GitProject(string name, string url, GitCredentials credentials) : this(name, url, new List<string>(), credentials) { }
+        #endregion
+    }
+
+    public class GitCredentials
+    {
+        #region Fields
+        public string UserName { get; }
+        public string Password { get; }
+        #endregion
+
+        #region Constructors
+        public GitCredentials(string userName, string password)
+        {
+            UserName = userName;
+            Password = password;
+        }
         #endregion
     }
 }
