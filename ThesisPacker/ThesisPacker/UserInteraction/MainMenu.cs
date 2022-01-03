@@ -15,6 +15,10 @@ namespace ThesisPacker.UserInteraction
         private const string MsgDeserializedConfig =
             "Successfully obtained Config...";
 
+        private const string MsgGreeting = "Welcome to the ThesisPacker";
+        private const string MsgCopyrightForLibraries =
+            "This Project is using LibGit2Sharp and YamlDotNet\nCopyright (c) LibGit2Sharp contributors\nCopyright(c) 2008, 2009, 2010, 2011, 2012, 2013, 2014 Antoine Aubry and contributors\n\n";
+
         private const string ErrInvalidConfigPath =
             "The specified Path seems not to be valid or does not exist. Please enter the File-Path to your prefered Config.yaml File:";
         private const string ErrInvalidConfigTargetDirectory =
@@ -53,6 +57,10 @@ namespace ThesisPacker.UserInteraction
         {
             try
             {
+                //greeting
+                Console.WriteLine(MsgGreeting);
+                Console.WriteLine(MsgCopyrightForLibraries);
+
                 //getting config
                 string configPath = (args.Length > 0) ? args[0] : AskUserForConfigPath();
                 ThesisPackerConfig config = await _configDeserializer.DeserializeConfig(configPath);
