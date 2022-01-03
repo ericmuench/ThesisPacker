@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ThesisPacker.Model;
 
@@ -13,7 +10,6 @@ namespace ThesisPacker.BusinessLogic
     public class BusinessLogicClerk : IThesisPackerClerk
     {
         #region Fields
-
         private const string MsgStartThesisPacking = "Start Thesis Packing...";
         private const string MsgPrepareTargetDir = "Preparing Target Directory...";
         private const string MsgStartFileAssemble = "Starting File Assemble...";

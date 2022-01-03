@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using ThesisPacker.Extensions;
 
 namespace ThesisPacker.UserInteraction
 {
