@@ -5,6 +5,8 @@ files:
 #All files from the directories above you want to ignore. You can leave this property out if you don't want to ignore files
 ignoredFiles:
     - "C:\\SomeDir\\AnotherDir\\SomeIgnoredFile.txt"
+#The Name of the final zip-file (make sure to NOT add the filename here because it will always be a zip file)
+thesisPackName: "MyThesis"    
 #The directory where you want to want to pack the thesis. E.g. if this is "C:\temp\packedthesis" then there will be a directory like that containing all thesis packs
 targetDirectory: "C:\\TargetDir"
 #The name of the directory specified for code. This is optional
