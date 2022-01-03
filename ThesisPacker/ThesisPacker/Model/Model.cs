@@ -10,16 +10,18 @@ namespace ThesisPacker.Model
         public List<string> Files { get; }
         public List<string> IgnoredFiles { get; set; }
         public string TargetDirectory { get; }
+        public string ThesisPackName { get; }
         public string CodeDirectoryName { get; }
         public List<GitProject> GitProjects { get; }
         #endregion
 
         #region Constructors
-        public ThesisPackerConfig(List<string> files, List<string> ignoredFiles, string targetDirectory, string codeDirName, List<GitProject> gitProjects)
+        public ThesisPackerConfig(List<string> files, List<string> ignoredFiles, string targetDirectory, string codeDirName, string thesisPackName, List<GitProject> gitProjects)
         {
             TargetDirectory = targetDirectory;
             CodeDirectoryName = codeDirName;
             Files = files;
+            ThesisPackName = thesisPackName;
             IgnoredFiles = ignoredFiles;
             GitProjects = gitProjects;
         }

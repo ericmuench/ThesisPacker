@@ -8,15 +8,15 @@ using ThesisPacker.Model;
 namespace ThesisPacker.BusinessLogic
 {
     #nullable enable
-    public class FilesAssembleClerk : IThesisPackerClerk
+    public class FilesAssembleClerk : IThesisPackerSubClerk
     {
         #region Interface Functions
-        public async Task Start(ThesisPackerConfig config, Action<string> onLog)
+        public async Task Start(ThesisPackerConfig config, string rootDir, Action<string> onLog)
         {
             var copyTasks = config
                 .Files
                 .Distinct()
-                .Select(filePath => CopyData(filePath, config.TargetDirectory, config.IgnoredFiles ,onLog));
+                .Select(filePath => CopyData(filePath, rootDir, config.IgnoredFiles ,onLog));
             await Task.WhenAll(copyTasks);
         }
         #endregion

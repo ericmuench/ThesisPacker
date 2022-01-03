@@ -13,7 +13,7 @@ using ThesisPacker.Model;
 
 namespace ThesisPacker.BusinessLogic
 {
-    public class GitAssembleClerk : IThesisPackerClerk
+    public class GitAssembleClerk : IThesisPackerSubClerk
     {
         #region Fields
 
@@ -22,7 +22,7 @@ namespace ThesisPacker.BusinessLogic
         #endregion
 
         #region InterfaceFunctions
-        public async Task Start(ThesisPackerConfig config, Action<string> onLog)
+        public async Task Start(ThesisPackerConfig config, string rootDir, Action<string> onLog)
         {
             //Do early return if there are no Projects specified
             if (config.GitProjects.IsEmpty())
@@ -31,7 +31,7 @@ namespace ThesisPacker.BusinessLogic
                 return;
             }
 
-            string fullCodeDirPath = Path.Combine(config.TargetDirectory, config.CodeDirectoryName);
+            var fullCodeDirPath = Path.Combine(rootDir, config.CodeDirectoryName);
             if (!Directory.Exists(fullCodeDirPath))
             {
                 Directory.CreateDirectory(fullCodeDirPath);

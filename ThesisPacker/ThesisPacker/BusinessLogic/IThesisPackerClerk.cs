@@ -11,4 +11,9 @@ namespace ThesisPacker.BusinessLogic
     {
         public Task Start(ThesisPackerConfig config, Action<string> onLog);
     }
+
+    interface IThesisPackerSubClerk
+    {
+        public Task Start(ThesisPackerConfig config, string rootDir, Action<string> onLog);
+    }
 }

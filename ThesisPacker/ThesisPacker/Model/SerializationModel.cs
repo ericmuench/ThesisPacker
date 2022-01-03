@@ -10,21 +10,23 @@ namespace ThesisPacker.Model
         public List<string> Files { get; set; }
         public List<string> IgnoredFiles { get; set; }
         public string TargetDirectory { get; set; }
+        public string ThesisPackName { get; set; }
         public string CodeDirectoryName { get; set;  }
         public List<SerializedGitProject> GitProjects { get; set; }
         #endregion
 
         #region Constructors
-        public SerializedThesisPackerConfig(List<string> files, List<string> ignoredFiles, string targetDirectory, string codeDirName, List<SerializedGitProject> gitProjects)
+        public SerializedThesisPackerConfig(List<string> files, List<string> ignoredFiles, string targetDirectory, string codeDirName, string thesisPackName, List<SerializedGitProject> gitProjects)
         {
             TargetDirectory = targetDirectory;
             CodeDirectoryName = codeDirName;
             IgnoredFiles = ignoredFiles;
             Files = files;
             GitProjects = gitProjects;
+            ThesisPackName = thesisPackName;
         }
 
-        public SerializedThesisPackerConfig() : this(new List<string>(), new List<string>(), "", "",new List<SerializedGitProject>()) { }
+        public SerializedThesisPackerConfig() : this(new List<string>(), new List<string>(), "", "", "",new List<SerializedGitProject>()) { }
         #endregion
 
         #region Functions
@@ -33,6 +35,7 @@ namespace ThesisPacker.Model
             IgnoredFiles,
             TargetDirectory, 
             CodeDirectoryName,
+            ThesisPackName,
             GitProjects.Select(it => it.ToGitProject()).ToList()
         );
         #endregion
@@ -53,7 +56,7 @@ namespace ThesisPacker.Model
             Name = name;
             Url = url;
             GitCredentials = credentials;
-            IgnoredBranches = ignoredBranches ?? new List<string>();
+            IgnoredBranches = ignoredBranches;
         }
 
         public SerializedGitProject(string name, string url, SerializedGitCredentials? credentials) : this(name, url, new List<string>(), credentials) { }

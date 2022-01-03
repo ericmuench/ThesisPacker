@@ -51,25 +51,31 @@ namespace ThesisPacker.BusinessLogic
                     Directory.CreateDirectory(config.TargetDirectory);
                 }
 
+                var workingDir = Path.Combine(config.TargetDirectory, config.ThesisPackName);
+                if (!Directory.Exists(workingDir))
+                {
+                    Directory.CreateDirectory(workingDir);
+                }
+
                 onLog(MsgStartFileAssemble);
-                var filesTask = _filesAssembleClerk.Start(config, onLog);
+                var filesTask = _filesAssembleClerk.Start(config, workingDir,onLog);
                 
                 onLog(MsgStartGitAssemble);
-                var gitTask = _gitAssembleClerk.Start(config, onLog);
+                var gitTask = _gitAssembleClerk.Start(config, workingDir,onLog);
 
                 await filesTask;
                 await gitTask;
 
                 var thesisPackFilePath = Path.Combine(
-                    Path.GetDirectoryName(config.TargetDirectory) ?? "C:\\",
-                    $"{Path.GetFileName(config.TargetDirectory)}_{DateTime.Now:yyyy-MM-dd-hhmmss}.zip"
+                    config.TargetDirectory,
+                    $"{config.ThesisPackName}_{DateTime.Now:yyyy-MM-dd-hhmmss}.zip"
                 );
-                ZipFile.CreateFromDirectory(config.TargetDirectory, thesisPackFilePath);
+                ZipFile.CreateFromDirectory(workingDir, thesisPackFilePath);
                 onLog(MsgCreatedThesisZipSuccess);
                 onLog(MsgPerformingCleanup);
-                if (Directory.Exists(config.TargetDirectory))
+                if (Directory.Exists(workingDir))
                 {
-                    Directory.Delete(config.TargetDirectory, true);
+                    Directory.Delete(workingDir, true);
                 }
             }
             catch (Exception ex)

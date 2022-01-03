@@ -30,6 +30,9 @@ namespace ThesisPacker.UserInteraction
             "The specified Config files contains an error: There seem to be file duplications. Please change your Config and try again!";
         private const string ErrDuplicateGitProjects =
             "The specified Config files contains an error: There seem to git Project duplications. Each Project needs an unique name. Please change your Config and try again!";
+        private const string ErrInvalidThesisPackName =
+            "The specified Config files contains an error: The ThesisPackName is invalid. Please change your Config and try again!";
+
         
 
         private readonly UserInputValidator _userInputValidator;
@@ -74,6 +77,9 @@ namespace ThesisPacker.UserInteraction
                         break;
                     case ConfigValidator.ConfigValidationInfo.DuplicateGitProjects:
                         Console.WriteLine(ErrDuplicateGitProjects);
+                        break;
+                    case ConfigValidator.ConfigValidationInfo.InvalidThesisPackName:
+                        Console.WriteLine(ErrInvalidThesisPackName);
                         break;
                     case ConfigValidator.ConfigValidationInfo.Valid:
                         var thesisPacker = new BusinessLogicClerk();

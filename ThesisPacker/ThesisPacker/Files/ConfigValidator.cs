@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThesisPacker.Extensions;
 using ThesisPacker.Model;
 
@@ -17,6 +14,12 @@ namespace ThesisPacker.Files
             if (!IsValidDirectoryName(config.TargetDirectory))
             {
                 return ConfigValidationInfo.InvalidTargetDirectoryName;
+            }
+
+            //validate thesis pack name
+            if (!IsValidFileName(config.ThesisPackName))
+            {
+                return ConfigValidationInfo.InvalidThesisPackName;
             }
 
             // validating files --> files is invalid if there are duplicates in files
@@ -41,7 +44,26 @@ namespace ThesisPacker.Files
 
         }
 
-        private bool IsValidDirectoryName(string dirName) => !dirName.IsNullOrWhiteSpace();
+        private bool IsValidDirectoryName(string dirName)
+        {
+            if (dirName.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            return dirName.All(ch => !Path.GetInvalidPathChars().Contains(ch));
+        }
+
+        private bool IsValidFileName(string filename)
+        {
+            if (filename.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            return filename.All(ch => !Path.GetInvalidFileNameChars().Contains(ch));
+        }
+
         #endregion
 
         #region ConfigValidationInfo
@@ -50,6 +72,7 @@ namespace ThesisPacker.Files
             Valid,
             DuplicateFiles,
             DuplicateGitProjects,
+            InvalidThesisPackName,
             InvalidCodeDirectoryName,
             InvalidTargetDirectoryName
         }
