@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable enable
 namespace ThesisPacker.Model
 {
     public class ThesisPackerConfig
@@ -17,8 +18,8 @@ namespace ThesisPacker.Model
         {
             TargetDirectory = targetDirectory;
             CodeDirectoryName = codeDirName;
-            Files = files ?? new List<string>();
-            GitProjects = gitProjects ?? new List<GitProject>();
+            Files = files;
+            GitProjects = gitProjects;
         }
         #endregion
     }
@@ -29,19 +30,19 @@ namespace ThesisPacker.Model
         public string Name { get; }
         public string Url { get; }
         public List<string> IgnoredBranches { get; }
-        public GitCredentials GitCredentials { get; }
+        public GitCredentials? GitCredentials { get; }
         #endregion
 
         #region Constructors
-        public GitProject(string name, string url, List<string> ignoredBranches, GitCredentials credentials)
+        public GitProject(string name, string url, List<string> ignoredBranches, GitCredentials? credentials)
         {
             Name = name;
             Url = url;
-            IgnoredBranches = ignoredBranches ?? new List<string>();
+            IgnoredBranches = ignoredBranches;
             GitCredentials = credentials;
         }
 
-        public GitProject(string name, string url, GitCredentials credentials) : this(name, url, new List<string>(), credentials) { }
+        public GitProject(string name, string url, GitCredentials? credentials) : this(name, url, new List<string>(), credentials) { }
         #endregion
     }
 

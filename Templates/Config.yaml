@@ -7,8 +7,8 @@ gitProjects:
     - name: "Project 1"
       url: "https://url-to-clone-yout-project.git"
       ignoredBranches: 
-          - "ig1"
-          - "ig2"
+          - "Branch1"
+          - "Branch2"
       gitCredentials:
           userName: "Username"
           password: "Password"

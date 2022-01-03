@@ -80,10 +80,6 @@ namespace ThesisPacker.UserInteraction
                         await thesisPacker.Start(config, Console.WriteLine);
                         break;
                 }
-                //TODO Delete this comment
-                /*Console.WriteLine(config.Files.PrettyPrint());
-                Console.WriteLine(config.TargetDirectory);
-                Console.WriteLine(config.GitProjects.Select(it => $"{it.Name} ({it.IgnoredBranches.Count} ignored branches)").PrettyPrint());*/
             }
             catch (Exception ex)
             {

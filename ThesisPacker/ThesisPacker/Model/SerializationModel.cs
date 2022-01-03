@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+#nullable enable
 namespace ThesisPacker.Model
 {
     public class SerializedThesisPackerConfig
@@ -40,11 +41,11 @@ namespace ThesisPacker.Model
         public string Name { get; set; }
         public string Url { get; set; }
         public List<string> IgnoredBranches { get; set; }
-        public SerializedGitCredentials GitCredentials { get; set; }
+        public SerializedGitCredentials? GitCredentials { get; set; }
         #endregion
 
         #region Constructors
-        public SerializedGitProject(string name, string url, List<string> ignoredBranches, SerializedGitCredentials credentials)
+        public SerializedGitProject(string name, string url, List<string> ignoredBranches, SerializedGitCredentials? credentials)
         {
             Name = name;
             Url = url;
@@ -52,13 +53,13 @@ namespace ThesisPacker.Model
             IgnoredBranches = ignoredBranches ?? new List<string>();
         }
 
-        public SerializedGitProject(string name, string url, SerializedGitCredentials credentials) : this(name, url, new List<string>(), credentials) { }
+        public SerializedGitProject(string name, string url, SerializedGitCredentials? credentials) : this(name, url, new List<string>(), credentials) { }
 
-        public SerializedGitProject() : this("", "", new List<string>(), new SerializedGitCredentials()) { }
+        public SerializedGitProject() : this("", "", new List<string>(), null) { }
         #endregion
 
         #region Functions
-        public GitProject ToGitProject() => new GitProject(this.Name, this.Url, this.IgnoredBranches, this.GitCredentials.ToGitCredentials());
+        public GitProject ToGitProject() => new GitProject(this.Name, this.Url, this.IgnoredBranches, this.GitCredentials?.ToGitCredentials());
         #endregion
     }
 
