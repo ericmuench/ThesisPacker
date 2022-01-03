@@ -89,20 +89,19 @@ namespace ThesisPacker.BusinessLogic
                     var checkoutBranches = repo
                         .Branches
                         .ToList()
-                        .Where(br => !project.IgnoredBranches.Contains(GetSimpleBranchName(br)))
+                        .Where(br => br.IsRemote &&!project.IgnoredBranches.Contains(GetSimpleBranchName(br)))
                         .ToList();
+
+                    Console.WriteLine($"{project.Name}:Got Branches: {checkoutBranches.PrettyPrint()}");
 
                     if (checkoutBranches.Count > 1)
                     {
                         foreach (var branch in checkoutBranches)
                         {
-                            if (branch.IsRemote)
-                            {
-                                var branchName = GetSimpleBranchName(branch).Replace("/", "_");
-                                onLog($"Checking out Branch {branchName}");
-                                ZipBranch(workingDir, Path.Combine(projectDir, $"{project.Name}-{branchName}.zip"), onLog);
-                            }
-                            
+                            var branchName = GetSimpleBranchName(branch).Replace("/", "_");
+                            onLog($"Checking out Branch {branchName} in Project {project.Name}");
+                            Commands.Checkout(repo, branch);
+                            ZipBranch(workingDir, Path.Combine(projectDir, $"{project.Name}-{branchName}.zip"), onLog);
                         }
                     }
                     else if(!checkoutBranches.IsEmpty())

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace ThesisPacker.BusinessLogic
         private const string MsgPrepareTargetDir = "Preparing Target Directory...";
         private const string MsgStartFileAssemble = "Starting File Assemble...";
         private const string MsgStartGitAssemble = "Starting Git Assemble...";
+        private const string MsgCreatedThesisZipSuccess = "Successfully created zip file for thesis";
+        private const string MsgPerformingCleanup = "Performing Cleanup...";
         private const string ErrOccurred = "An Error Occurred!";
 
         private readonly FilesAssembleClerk _filesAssembleClerk;
@@ -56,6 +59,18 @@ namespace ThesisPacker.BusinessLogic
 
                 await filesTask;
                 await gitTask;
+
+                var thesisPackFilePath = Path.Combine(
+                    Path.GetDirectoryName(config.TargetDirectory) ?? "C:\\",
+                    $"{Path.GetFileName(config.TargetDirectory)}_{DateTime.Now:yyyy-MM-dd-hhmmss}.zip"
+                );
+                ZipFile.CreateFromDirectory(config.TargetDirectory, thesisPackFilePath);
+                onLog(MsgCreatedThesisZipSuccess);
+                onLog(MsgPerformingCleanup);
+                if (Directory.Exists(config.TargetDirectory))
+                {
+                    Directory.Delete(config.TargetDirectory, true);
+                }
             }
             catch (Exception ex)
             {
