@@ -1,8 +1,16 @@
-﻿files:
+﻿#All files and directories you want to include in your thesis pack
+files:
     - "C:\\SomeDir\\AnotherDir"
-    - "C:\\SomeDir\\AnotherDir\\SomeFile.pdf"
+    - "C:\\SomeDir\\AnotherDir2\\SomeFile.pdf"
+#All files from the directories above you want to ignore. You can leave this property out if you don't want to ignore files
+ignoredFiles:
+    - "C:\\SomeDir\\AnotherDir\\SomeIgnoredFile.txt"
+#The directory where you want to want to pack the thesis. E.g. if this is "C:\temp\packedthesis" then there will be a directory like that containing all thesis packs
 targetDirectory: "C:\\TargetDir"
-codeDirectoryName: "Code"  
+#The name of the directory specified for code. This is optional
+codeDirectoryName: "Code"
+#A anbritrary number of Git Projects. This is optional. Each Project should be made of a unique name, an url evetually some credentials to authenticate. 
+#Use ignoredBranches to exclude some branches from the finally packed zip file.
 gitProjects:
     - name: "Project 1"
       url: "https://url-to-clone-yout-project.git"

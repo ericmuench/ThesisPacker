@@ -8,26 +8,29 @@ namespace ThesisPacker.Model
     {
         #region Fields
         public List<string> Files { get; set; }
+        public List<string> IgnoredFiles { get; set; }
         public string TargetDirectory { get; set; }
         public string CodeDirectoryName { get; set;  }
         public List<SerializedGitProject> GitProjects { get; set; }
         #endregion
 
         #region Constructors
-        public SerializedThesisPackerConfig(List<string> files, string targetDirectory, string codeDirName, List<SerializedGitProject> gitProjects)
+        public SerializedThesisPackerConfig(List<string> files, List<string> ignoredFiles, string targetDirectory, string codeDirName, List<SerializedGitProject> gitProjects)
         {
             TargetDirectory = targetDirectory;
             CodeDirectoryName = codeDirName;
-            Files = files ?? new List<string>();
-            GitProjects = gitProjects ?? new List<SerializedGitProject>();
+            IgnoredFiles = ignoredFiles;
+            Files = files;
+            GitProjects = gitProjects;
         }
 
-        public SerializedThesisPackerConfig() : this(new List<string>(), "", "",new List<SerializedGitProject>()) { }
+        public SerializedThesisPackerConfig() : this(new List<string>(), new List<string>(), "", "",new List<SerializedGitProject>()) { }
         #endregion
 
         #region Functions
         public ThesisPackerConfig ToThesisPackerConfig() => new ThesisPackerConfig(
             Files, 
+            IgnoredFiles,
             TargetDirectory, 
             CodeDirectoryName,
             GitProjects.Select(it => it.ToGitProject()).ToList()

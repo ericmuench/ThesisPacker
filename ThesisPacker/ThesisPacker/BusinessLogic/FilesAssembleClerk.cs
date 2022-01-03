@@ -16,13 +16,13 @@ namespace ThesisPacker.BusinessLogic
             var copyTasks = config
                 .Files
                 .Distinct()
-                .Select(filePath => CopyData(filePath, config.TargetDirectory, onLog));
+                .Select(filePath => CopyData(filePath, config.TargetDirectory, config.IgnoredFiles ,onLog));
             await Task.WhenAll(copyTasks);
         }
         #endregion
 
         #region Help Functions
-        private async Task<FileCopyOperationStatus> CopyData(string originalFilePath, string destinationDirectory, Action<string> onLog)
+        private async Task<FileCopyOperationStatus> CopyData(string originalFilePath, string destinationDirectory, List<string> ignoredFiles, Action<string> onLog)
         {
             FileAttributes attrs = File.GetAttributes(originalFilePath);
             if (attrs.HasFlag(FileAttributes.Directory))
@@ -36,7 +36,7 @@ namespace ThesisPacker.BusinessLogic
                 IEnumerable<Task<FileCopyOperationStatus>> statusTasks = Directory
                     .GetFiles(originalFilePath)
                     .Concat(Directory.GetDirectories(originalFilePath))
-                    .Select(path => CopyData(path, newDestinationDir, onLog));
+                    .Select(path => CopyData(path, newDestinationDir, ignoredFiles, onLog));
 
                 FileCopyOperationStatus[] allStatus = await Task.WhenAll(statusTasks);
 
@@ -57,6 +57,11 @@ namespace ThesisPacker.BusinessLogic
             }
             else
             {
+                if (ignoredFiles.Contains(originalFilePath))
+                {
+                    return FileCopyOperationStatus.Skipped;
+                }
+
                 return CopyFile(originalFilePath, destinationDirectory, onLog);
             }
 
@@ -92,7 +97,7 @@ namespace ThesisPacker.BusinessLogic
         #region Inner classes
         private enum FileCopyOperationStatus
         {
-            Success, Failed, PartlySuccess
+            Success, Failed, PartlySuccess, Skipped
         }
         #endregion
     }
