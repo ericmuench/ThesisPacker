@@ -24,6 +24,12 @@ namespace ThesisPacker.BusinessLogic
         #region Help Functions
         private async Task<FileCopyOperationStatus> CopyData(string originalFilePath, string destinationDirectory, List<string> ignoredFiles, Action<string> onLog)
         {
+
+            if (ignoredFiles.Contains(originalFilePath))
+            {
+                return FileCopyOperationStatus.Skipped;
+            }
+
             FileAttributes attrs = File.GetAttributes(originalFilePath);
             if (attrs.HasFlag(FileAttributes.Directory))
             {
@@ -57,11 +63,6 @@ namespace ThesisPacker.BusinessLogic
             }
             else
             {
-                if (ignoredFiles.Contains(originalFilePath))
-                {
-                    return FileCopyOperationStatus.Skipped;
-                }
-
                 return CopyFile(originalFilePath, destinationDirectory, onLog);
             }
 

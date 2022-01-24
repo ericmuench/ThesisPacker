@@ -5,6 +5,8 @@
     <TargetFramework>net5.0</TargetFramework>
     <ApplicationIcon />
     <StartupObject>ThesisPacker.Program</StartupObject>
+    <Version>1.0.1</Version>
+    <Authors>Eric Münch</Authors>
   </PropertyGroup>
 
   <ItemGroup>
