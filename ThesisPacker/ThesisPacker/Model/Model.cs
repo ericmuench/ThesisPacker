@@ -35,18 +35,20 @@ namespace ThesisPacker.Model
         public string Url { get; }
         public List<string> IgnoredBranches { get; }
         public GitCredentials? GitCredentials { get; }
+        public bool KeepGitIntegration { get; }
         #endregion
 
         #region Constructors
-        public GitProject(string name, string url, List<string> ignoredBranches, GitCredentials? credentials)
+        public GitProject(string name, string url, List<string> ignoredBranches, GitCredentials? credentials, bool keepGitIntegration)
         {
             Name = name;
             Url = url;
+            KeepGitIntegration = keepGitIntegration;
             IgnoredBranches = ignoredBranches;
             GitCredentials = credentials;
         }
 
-        public GitProject(string name, string url, GitCredentials? credentials) : this(name, url, new List<string>(), credentials) { }
+        public GitProject(string name, string url, GitCredentials? credentials) : this(name, url, new List<string>(), credentials, false) { }
         #endregion
     }
 

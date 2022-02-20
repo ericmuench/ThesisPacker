@@ -8,7 +8,7 @@ using ThesisPacker.Model;
 namespace ThesisPacker.BusinessLogic
 {
     #nullable enable
-    public class FilesAssembleClerk : IThesisPackerSubClerk
+    public class FilesAssembleClerk : IThesisPackerSubClerk, IFileCopyClerk
     {
         #region Interface Functions
         public async Task Start(ThesisPackerConfig config, string rootDir, Action<string> onLog)
@@ -16,13 +16,13 @@ namespace ThesisPacker.BusinessLogic
             var copyTasks = config
                 .Files
                 .Distinct()
-                .Select(filePath => CopyData(filePath, rootDir, config.IgnoredFiles ,onLog));
+                .Select(filePath => CopyData(filePath, rootDir, config.IgnoredFiles , true,onLog));
             await Task.WhenAll(copyTasks);
         }
         #endregion
 
         #region Help Functions
-        private async Task<FileCopyOperationStatus> CopyData(string originalFilePath, string destinationDirectory, List<string> ignoredFiles, Action<string> onLog)
+        public async Task<FileCopyOperationStatus> CopyData(string originalFilePath, string destinationDirectory, List<string> ignoredFiles, bool copyBaseDir, Action<string> onLog)
         {
 
             if (ignoredFiles.Contains(originalFilePath))
@@ -33,7 +33,7 @@ namespace ThesisPacker.BusinessLogic
             FileAttributes attrs = File.GetAttributes(originalFilePath);
             if (attrs.HasFlag(FileAttributes.Directory))
             {
-                string newDestinationDir = Path.Combine(destinationDirectory, Path.GetFileName(originalFilePath));
+                string newDestinationDir = (copyBaseDir) ? Path.Combine(destinationDirectory, Path.GetFileName(originalFilePath)) : destinationDirectory;
                 if (!Directory.Exists(newDestinationDir))
                 {
                     Directory.CreateDirectory(newDestinationDir);
@@ -42,7 +42,7 @@ namespace ThesisPacker.BusinessLogic
                 IEnumerable<Task<FileCopyOperationStatus>> statusTasks = Directory
                     .GetFiles(originalFilePath)
                     .Concat(Directory.GetDirectories(originalFilePath))
-                    .Select(path => CopyData(path, newDestinationDir, ignoredFiles, onLog));
+                    .Select(path => CopyData(path, newDestinationDir, ignoredFiles, true, onLog));
 
                 FileCopyOperationStatus[] allStatus = await Task.WhenAll(statusTasks);
 
@@ -51,15 +51,33 @@ namespace ThesisPacker.BusinessLogic
                     onLog($"\n\nCOPIED ALL FILES OF DIR {originalFilePath}\n\n");
                     return FileCopyOperationStatus.Success;
                 }
-                
-                if (allStatus.Any(st => st == FileCopyOperationStatus.Success || st == FileCopyOperationStatus.PartlySuccess))
+
+                if (allStatus.All(st => st == FileCopyOperationStatus.Failed))
+                {
+                    onLog($"\n\nCOPYING FILES OF DIR {originalFilePath} FAILED!!!\n\n");
+                    return FileCopyOperationStatus.Failed;
+                }
+
+                if (allStatus.All(st => st == FileCopyOperationStatus.Skipped))
+                {
+                    onLog($"\n\nCOPYING FILES OF DIR {originalFilePath} WAS COMPLETELY SKIPPED...\n\n");
+                    return FileCopyOperationStatus.Skipped;
+                }
+
+                if (allStatus.Any(st => st == FileCopyOperationStatus.Skipped))
+                {
+                    onLog($"\n\nSOME FILES OF DIR {originalFilePath} WERE SKIPPED...\n\n");
+                }
+
+                if (allStatus.Any(st => st == FileCopyOperationStatus.Failed || st == FileCopyOperationStatus.PartlySuccess))
                 {
                     onLog($"\n\nAN ERROR OCCURRED WHILE COPYING FILES\nCOPIED SOME FILES OF DIR {originalFilePath}\n\n");
                     return FileCopyOperationStatus.PartlySuccess;
                 }
 
-                onLog($"\n\nCOPYING FILES OF DIR {originalFilePath} FAILED!!!\n\n");
-                return FileCopyOperationStatus.Failed;
+                //assume everything is ok
+                return FileCopyOperationStatus.Success;
+
             }
             else
             {
@@ -92,13 +110,6 @@ namespace ThesisPacker.BusinessLogic
                 onLog(ex.ToString());
                 return FileCopyOperationStatus.Failed;
             }
-        }
-        #endregion
-
-        #region Inner classes
-        private enum FileCopyOperationStatus
-        {
-            Success, Failed, PartlySuccess, Skipped
         }
         #endregion
     }

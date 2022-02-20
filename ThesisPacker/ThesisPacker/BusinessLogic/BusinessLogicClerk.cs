@@ -32,7 +32,7 @@ namespace ThesisPacker.BusinessLogic
             _gitAssembleClerk = gitAssembleClerk;
         }
 
-        public BusinessLogicClerk() : this(new FilesAssembleClerk(), new GitAssembleClerk()) { }
+        public BusinessLogicClerk() : this(new FilesAssembleClerk(), new GitAssembleClerk(new FilesAssembleClerk())) { }
         #endregion
 
         #region Interface Functions

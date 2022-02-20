@@ -48,24 +48,26 @@ namespace ThesisPacker.Model
         public string Url { get; set; }
         public List<string> IgnoredBranches { get; set; }
         public SerializedGitCredentials? GitCredentials { get; set; }
+        public bool KeepGitIntegration { get; set; }
         #endregion
 
         #region Constructors
-        public SerializedGitProject(string name, string url, List<string> ignoredBranches, SerializedGitCredentials? credentials)
+        public SerializedGitProject(string name, string url, List<string> ignoredBranches, SerializedGitCredentials? credentials, bool keepGitIntegration)
         {
             Name = name;
             Url = url;
             GitCredentials = credentials;
             IgnoredBranches = ignoredBranches;
+            KeepGitIntegration = keepGitIntegration;
         }
 
-        public SerializedGitProject(string name, string url, SerializedGitCredentials? credentials) : this(name, url, new List<string>(), credentials) { }
+        public SerializedGitProject(string name, string url, SerializedGitCredentials? credentials) : this(name, url, new List<string>(), credentials, false) { }
 
-        public SerializedGitProject() : this("", "", new List<string>(), null) { }
+        public SerializedGitProject() : this("", "", new List<string>(), null, false) { }
         #endregion
 
         #region Functions
-        public GitProject ToGitProject() => new GitProject(this.Name, this.Url, this.IgnoredBranches, this.GitCredentials?.ToGitCredentials());
+        public GitProject ToGitProject() => new GitProject(this.Name, this.Url, this.IgnoredBranches, this.GitCredentials?.ToGitCredentials(), this.KeepGitIntegration);
         #endregion
     }
 

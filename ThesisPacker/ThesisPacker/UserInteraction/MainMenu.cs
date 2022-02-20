@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ThesisPacker.Files;
 using ThesisPacker.Model;
 using ThesisPacker.BusinessLogic;
+using ThesisPacker.Extensions;
 
 namespace ThesisPacker.UserInteraction
 {
@@ -80,6 +82,7 @@ namespace ThesisPacker.UserInteraction
                 //getting config
                 string configPath = (args.Length > 0) ? args[0] : AskUserForConfigPath();
                 ThesisPackerConfig config = await _configDeserializer.DeserializeConfig(configPath);
+                Console.WriteLine(config.GitProjects.Select(it => it.KeepGitIntegration).PrettyPrint());
                 Console.WriteLine(MsgDeserializedConfig);
 
                 var configValidation = _configValiator.ValidateConfig(config);
