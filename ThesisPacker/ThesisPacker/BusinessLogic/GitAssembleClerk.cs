@@ -56,7 +56,7 @@ namespace ThesisPacker.BusinessLogic
             {
                 //create directory for project
                 var projectDir = Path.Combine(codeDirPath, project.Name);
-                var workingDir = Path.Combine(projectDir, $"WorkingDir-{Guid.NewGuid()}");
+                var workingDir = Path.Combine(projectDir, "WorkingDir");
 
                 if (!Directory.Exists(projectDir))
                 {
@@ -134,7 +134,7 @@ namespace ThesisPacker.BusinessLogic
 
         private async Task PackBranch(string sourceDir,string projectBranchId, string projectDir, bool keepGitIntegration, Action<string> onLog)
         {
-            var copyDir = Path.Combine(projectDir, $"CopyDir-{projectBranchId}-{Guid.NewGuid()}");
+            var copyDir = Path.Combine(projectDir, $"CopyDir-{projectBranchId}");
             if (!Directory.Exists(copyDir))
             {
                 Directory.CreateDirectory(copyDir);
