@@ -12,7 +12,8 @@ targetDirectory: "C:\\TargetDir"
 #The name of the directory specified for code. This is optional
 codeDirectoryName: "Code"
 #A anbritrary number of Git Projects. This is optional. Each Project should be made of a unique name, an url evetually some credentials to authenticate. 
-#Use ignoredBranches to exclude some branches from the finally packed zip file.
+#Use optional ignoredBranches-Parameter to exclude some branches from the finally packed zip file.
+#Use optional keepGitIntegration Parameter to keep the .git-Folder in the Project-Folders (This option is only available for all branches in a Repo for now). This value is defaulted to false, which disables Git-Integration after cloning Project
 gitProjects:
     - name: "Project 1"
       url: "https://url-to-clone-yout-project.git"
@@ -22,3 +23,4 @@ gitProjects:
       gitCredentials:
           userName: "Username"
           password: "Password"
+      keepGitIntegration: true

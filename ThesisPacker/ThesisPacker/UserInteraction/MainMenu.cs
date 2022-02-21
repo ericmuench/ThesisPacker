@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using ThesisPacker.Files;
 using ThesisPacker.Model;
@@ -17,7 +18,7 @@ namespace ThesisPacker.UserInteraction
         private const string MsgDeserializedConfig =
             "Successfully obtained Config...";
 
-        private const string MsgGreeting = "Welcome to the ThesisPacker";
+        private string MsgGreeting = $"Welcome to the ThesisPacker v{Assembly.GetExecutingAssembly()?.GetName()?.Version}";
         private const string MsgUsedLibraries =
             "This Project is using LibGit2Sharp and YamlDotNet. \n"+
             "Copyright (c) LibGit2Sharp contributors\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files(the \"Software\"), " +
